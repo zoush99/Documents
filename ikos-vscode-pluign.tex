@@ -18,6 +18,20 @@
 \usepackage{multicol}
 \usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue,
 citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage{listings}
+\lstset{
+    basicstyle=\footnotesize\tt,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    showstringspaces=false,
+    numbers=left, 
+    numberstyle=\footnotesize\tt, 
+    stepnumber=1, 
+    numbersep=10pt,
+    captionpos=b,
+    framexleftmargin=10pt,
+    xleftmargin=15pt
+}
 
 \DeclareMathOperator{\arcsec}{arcsec}
 \DeclareMathOperator{\arccot}{arccot}
@@ -48,55 +62,64 @@ citecolor=blue, urlcolor=blue]{hyperref}
 \rhead{\today}
  
 % \maketitle
-\section{Intro to LaTeX}
-Hi there! Here is a brief introduction to LaTeX. It's a great system for creating beautifully typeset scientific documents. The main difference between LaTeX and your standard word processing program, is that you write code that tells LaTeX what you want it to display and the program creates handles all the little things that make your math look great.
+\section{Overview}
 
-Lets start with some basics. You can type text normally but when you want to type some math start and end your expression with a \$. For example if I type the Pythagorean Theorem, as long as I surround my equation with dollar signs I get $a^2 +b^2 = c^2$. If I want to emphasize an equation simply put TWO dollar signs around the mathematics. For example a similar expression with two dollar signs around it looks like so: $$x_1^n + x_2^n = x_3^n.$$ (check out the code to see how to generate subscripts!)
+\subsection{package.json}
+The package.json file is a configuration file used in Node.js-based projects. It contains metadata about the project and its dependencies.
 
-In LaTeX we use the curly braces, \{ \}, to group things. If we want to raise $e$ to the $42$nd power and we just type it with no grouping we get $e^42$ which is not what we want. Surrounding the $42$ with curly braces gives $e^{42}$.
+Here are some of the key fields in a typical package.json file:
 
-The really really really great thing about latex is the HUGE library of mathematical symbols, every symbol starts with a $\backslash$, so if I want a nice pi, I just type $\backslash$pi in math mode like so: $\pi$. Want an integral? Try $\backslash$int, want a fraction? Try $\backslash$frac\{a\}\{b\} (this gives $\frac{a}{b}$) Here is a more complicated example:
-$$
-\int_a^b f \left(\frac{x}{2} \right) \ dx =2\left( F\left(\frac{b}{2} \right) - F\left(\frac{a}{2}\right) \right)
-$$
-(those nice sized parenthesis come from using the $\backslash$left( and $\backslash$right) commands). If you are wondering what the latex command for a symbol is, just try and guess it. If that doesn't work, google it!
+name: The name of the project.
+version: The version of the project.
+description: A brief description of the project.
+author: Information about the author of the project.
+license: The license under which the project is released.
+dependencies: A list of dependencies required by the project.
+devDependencies: A list of development dependencies required for building and testing the project.
+scripts: A set of scripts that can be run using the npm run command.
+In the context of the package.json file you mentioned, it seems to be a configuration file for a VS Code extension. It likely contains information about the extension, its dependencies, and the scripts that can be run to build and test it.
 
-There are a few little tricks to making your math look nice, one is the align environment which lets you type multiple lines of aligned mathematical expressions. For instance:
-\begin{align*}
-(x^2+y^2)(z^2+w^2) & = (xz)^2 + (yz)^2 + (xw)^2 + (yw)^2 \\
-& =  (xz)^2 + 2wxyz + (yw)^2 + (yz)^2 - 2 wxyz + (xw)^2 \\
-&= (xz+yw)^2 + (yz-xw)^2
-\end{align*}
-here the $\backslash\backslash$ is a line break and the $\&$ is an alignment character. 
-\section{Sample Proofs}
-\begin{problem} $1^3+2^3+\ldots +n^3 = \left[ \frac{n(n+1)}{2}\right]^2$  for all natural numbers. 
+\texttt{galleryBanner} specifies the color and theme of the banner that is displayed in the Visual Studio Code Marketplace when the extension is listed. For example, the color can be set to \texttt{#303f9f} and the theme can be set to \texttt{dark}.
+\begin{lstlisting}
+    "galleryBanner": {
+        "color": "#303f9f",
+        "theme": "dark"
+      }
+\end{lstlisting}
 
-\end{problem}
- 
-\begin{proof}
-We proceed by induction. When $n=1$ we have 
-$$
-1^3 + \ldots + n^3 = 1^3 =1
-$$
-and
-$$
-\left[ \frac{n(n+1)}{2}\right]^2=\left[ \frac{1(1+1)}{2}\right]^2 = 1^2 =1.
-$$
-Thus the equation holds when $n=1$.
+In addition, this file defines many other fields that can be used to customize the behavior of the extension. For example, you can use the \texttt{engines} field to specify the Node.js version that the extension requires. Many information can be displayed in the Visual Studio Code Marketplace when the extension is listed. For example, you can use the \texttt{publisher} field to specify the publisher of the extension.
 
-Now assume the equation holds for some $n \in \mathbb N$. Then by our assumption we have
-\begin{align*}
-1^3 + \ldots + n^3 + (n+1)^3& =   \left[ \frac{n(n+1)}{2}\right]^2 + (n+1)^3 = (n+1)^2\left( \frac{n^2}{4} + (n+1)\right) \\
-&=(n+1)^2\left( \frac{n^2+4n+4}{4} \right) = (n+1)^2\frac{(n+2)^2}{4}  \\ &=  \left[ \frac{(n+1)(n+2)}{2}\right]^2.
-\end{align*}
-Therefore, by induction, the equation holds for all $n\in \mathbb N$.
-\end{proof}
+\textcolor{green}{I have modified the \texttt{engines} field to adapt ikos-vscode plugin. I extended the \texttt{publisher} field to zoush99, and made it support ikos.}
 
-\begin{problem} Prove $A \subseteq B \Rightarrow A \cap C \cont B \cap C$
-\end{problem}
-\begin{proof} Assume $A \cont B $ and let $x\in A \cap C$. If $x \in  A \cap C$, then $x\in A$ and $x \in C$. As $x\in A$, by assumption we have that $x \in B$. Thus $x \in B$ and $x \in C$, giving $x\in B \cap C$. Therefore if $A \subseteq B $, then $A \cap C \cont B \cap C$.
-\end{proof}
+\textcolor{green}{I have modified the \texttt{activationEvents} to support LLVM IR.} In the future, I would like to enable this extensoin to support Fortran programs.
 
-% THE DOCUMENT IS ESSENTIALLY DONE AT THIS POINT, NO NEED TO EDIT ANYTHING BELOW THIS______________________________________________________________________________________________
- 
+\textcolor{red}{But I also need to modify \texttt{dependencies} and \texttt{devDependencies} fields because they may be too old to work with current version of nodejs or npm.}
+
+The configuration provides a comprehensive set of options for the c-cpp-flylint extension, allowing users to customize the behavior of the linter, including when it runs, logging verbosity, language standards, include paths, and web query settings for diagnostic code lookups. The configuration uses various data types, including booleans, strings, arrays, and enums, to define the settings and their defaults.
+
+\begin{lstlisting}
+    "c-cpp-flylint.run": {
+        "order": 2,
+        "type": "string",
+        "enum": [
+          "onSave",
+          "onType",
+          "onBuild"
+        ],
+        "default": "onSave",
+        "description": "Run the linter upon typing (onType), upon a build task (onBuild), or upon file save (onSave)."
+      }
+\end{lstlisting}
+
+This configuration setting for `c-cpp-flylint` allows you to specify when the linter should run. You can choose between running it on typing, on saving the file, or on building the project, with the default behavior being to run the linter when the file is saved.
+
+
+
+
+
+\subsection{tsconfig.json}
+
+\subsection{typings.d.ts}
+This file is a file that declare the types for the ikos-vscode plugin. Some lines are added by zoush99, because ikos-vscode plugin needs them.
+
 \end{document}
