@@ -1,0 +1,243 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{listings}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,scrextend}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\newcommand{\cont}{\subseteq}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage[mathscr]{euscript}
+\let\euscr\mathscr \let\mathscr\relax% just so we can load this and rsfs
+\usepackage[scr]{rsfso}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue,
+citecolor=blue, urlcolor=blue]{hyperref}
+
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccot}{arccot}
+\DeclareMathOperator{\arccsc}{arccsc}
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\dfdx}{\frac{df}{dx}}
+\newcommand{\ddxp}[1]{\frac{d}{dx}\left( #1 \right)}
+\newcommand{\dydx}{\frac{dy}{dx}}
+\let\ds\displaystyle
+\newcommand{\intx}[1]{\int #1 \, dx}
+\newcommand{\intt}[1]{\int #1 \, dt}
+\newcommand{\defint}[3]{\int_{#1}^{#2} #3 \, dx}
+\newcommand{\imp}{\Rightarrow}
+\newcommand{\un}{\cup}
+\newcommand{\inter}{\cap}
+\newcommand{\ps}{\mathscr{P}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newtheorem*{sol}{Solution}
+\newtheorem*{claim}{Claim}
+\newtheorem{problem}{Problem}
+
+\lstset{
+    basicstyle=\footnotesize\tt,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    showstringspaces=false,
+    numbers=left, 
+    numberstyle=\footnotesize\tt, 
+    stepnumber=1, 
+    numbersep=10pt,
+    captionpos=b,
+    framexleftmargin=10pt,
+    xleftmargin=15pt
+}
+\begin{document}
+ 
+% EVERYTHING ABOVE THIS LINE IS JUST PREABLE, NO NEED TO MESS WITH IT.__________________________________________________________________________________________
+%
+
+\lhead{Math 108}
+\chead{Your Name}
+\rhead{\today}
+ 
+% \maketitle
+
+\section{Introduction of IKOS}
+
+\subsection{core}
+
+\subsubsection{number.hpp}
+This program is a header file that contains definitions related to numbers in the IKOS static analyzer library. It includes various headers related to numbers like bounds, machine integers, signedness, etc. This header file provides essential definitions and inclusions for working with numbers in the IKOS library.
+
+\begin{lstlisting}
+    #include <ikos/core/number/f_number.hpp>  // By zoush99
+    #include <ikos/core/number/machine_int.hpp>
+    #include <ikos/core/number/q_number.hpp>
+    #include <ikos/core/number/z_number.hpp>
+\end{lstlisting} 
+
+\subsubsection{literal.hpp}
+This program introduces  data structures for literals. The class to represent a literal is classfied to these types: \texttt{constant machine integer, constant floating point, constant memory location, null, undefined, machine integer variable, floating point variable, and pointer variable}. Lit is defined as follows,
+\begin{lstlisting}
+    using Lit = boost::variant< MachineIntLit,
+    FloatingPointLit,
+    MemoryLocationLit,
+    NullLit,
+    UndefinedLit,
+    MachineIntVarLit,
+    FloatingPointVarLit,
+    PointerVarLit >;
+\end{lstlisting}
+
+The \texttt{MachineIntLit} and \texttt{FloatingPointLit} are defined as follows. Every type of literal is defined with a value and an operator ==.
+\begin{lstlisting}
+    struct MachineIntLit {
+        MachineInt value;
+    
+        bool operator==(const MachineIntLit& o) const 
+        { return value == o.value; }
+      };
+    
+      struct FloatingPointLit {
+        FNumber value;
+    
+        bool operator==(const FloatingPointLit& o) const {
+          return value == o.value;
+        }
+      };
+\end{lstlisting}
+
+The program construct a literal as variable literal by some constructors.
+
+\begin{lstlisting}
+    /// \brief Create a machine integer variable literal
+    static Literal machine_int_var(VariableRef v) {
+      return Literal(Lit(MachineIntVarLit{v}));
+    }
+  
+    /// \brief Create a floating point variable literal
+    static Literal floating_point_var(VariableRef v) {
+      return Literal(Lit(FloatingPointVarLit{v}));
+    }
+  
+    /// \brief Create a pointer variable literal
+    static Literal pointer_var(VariableRef v) {
+      return Literal(Lit(PointerVarLit{v}));
+    }
+\end{lstlisting}
+
+There are some functions to check whether the literal is a specific type, such as constant machine integer, constant floating point and constant memory location et al..
+\begin{lstlisting}
+    /// \brief Return true if the literal is a constant machine integer
+    bool is_machine_int() const {
+      return boost::apply_visitor(IsType< MachineIntLit >(), this->_lit);
+    }
+  
+    /// \brief Return true if the literal is a constant floating point
+    bool is_floating_point() const {
+      return boost::apply_visitor(IsType< FloatingPointLit >(), this->_lit);
+    }
+  
+    /// \brief Return true if the literal is a constant memory location
+    bool is_memory_location() const {
+      return boost::apply_visitor(IsType< MemoryLocationLit >(), this->_lit);
+    }
+\end{lstlisting}
+
+In addition, a base class for visitors of literals is defined.
+\begin{lstlisting}
+    /// \brief Base class for visitors of literals
+    ///
+    /// Visitors should implement the following methods:
+    ///
+    /// R machine_int(const MachineInt&);
+    /// R numeric(const FNumber&);
+    /// R memory_location(MemoryLocationRef);
+    /// R null();
+    /// R undefined();
+    /// R machine_int_var(VariableRef);
+    /// R floating_point_var(VariableRef);
+    /// R pointer_var(VariableRef);
+\end{lstlisting}
+
+\subsubsection{linear\_expression.hpp}
+This program defines a data structure for the symbolic manipulation of linear expressions. It includes functionalities to represent and manipulate linear expressions involving variables, constants, addition, subtraction, multiplication, and unary minus. The program also provides an output operator to write a linear expression to a stream. Additionally, it includes specific functionalities like creating constant expressions, variable expressions, and expressions involving constants multiplied by variables. The program uses templates to handle different number types and variable references. It also includes various helper functions and iterators to work with the terms of the linear expression.
+
+There are two types of class, \texttt{VariableExpression} and \texttt{LinearExpression}. \texttt{VariableExpression} is defined by a \texttt{VariableRef}. The coefficient of \texttt{VariableExpression} is \texttt{1}. \texttt{LinearExpression} is defined by \texttt{map} and \texttt{Number}. A \texttt{LinearExpression} contains two components, expression with variables and coefficients as well as constant. The variable expression are defined by maps as follows.
+\begin{lstlisting}
+    using VariableExpressionT = VariableExpression< Number, VariableRef >;
+\end{lstlisting}
+
+There are some functions to manipulate LinearExpressions, such as \texttt{+=, -=, *=, -} et al.. Programs can add a variable of term to the \texttt{LinearExpression}. For example,
+\begin{lstlisting}
+    /// \brief Add a variable
+    void add(VariableRef var) { this->add(1, var); }
+  
+    /// \brief Add a term cst * var
+    void add(const Number& cst, VariableRef var) {
+      auto it = this->_map.find(var);
+      if (it != this->_map.end()) {
+        Number r = it->second + cst;
+        if (r == 0) {
+          this->_map.erase(it);
+        } else {
+          it->second = r;
+        }
+      } else {
+        if (cst != 0) {
+          this->_map.emplace(var, cst);
+        }
+      }
+    }
+\end{lstlisting}
+
+Besides, programs can generate a \texttt{LinearExpression} from multiplication of two components: \texttt{VariableExpression} and \texttt{Number}.
+
+\begin{lstlisting}
+template < typename Number, typename VariableRef >
+inline LinearExpression< Number, VariableRef > operator*(
+    VariableExpression< Number, VariableRef > e, Number n) {
+  return LinearExpression< Number, VariableRef >(std::move(n), e.var());
+}
+
+template < typename Number, typename VariableRef >
+inline LinearExpression< Number, VariableRef > operator*(
+    LinearExpression< Number, VariableRef > e, const Number& n) {
+  e *= n;
+  return e;
+}
+\end{lstlisting}
+
+To sum up, this program enable other programs to manipulate \texttt{LinearExpression} easily.
+
+\subsubsection{linear\_constraint}
+This program defines a data structure for the symbolic manipulation of linear expressions. It includes functionalities to represent and manipulate linear expressions involving \texttt{variables, constants, addition, subtraction, multiplication, and unary minus}. The program also provides an output operator to write a linear expression to a stream. Additionally, it includes specific functionalities like creating \texttt{constant expressions, variable expressions, and expressions involving constants multiplied by variables}. The program uses templates to handle different number types and variable references. It also includes various helper functions and iterators to work with the terms of the linear expression.
+
+The program defines a class called \texttt{LinearConstraint} that represents a linear constraint. It has a template parameter for the number type and a template parameter for the variable reference type. The class has a member variable \texttt{\_expr} of type LinearExpression that represents the linear expression of the constraint. It also has a member variable \texttt{\_kind} of type Kind that represents the kind of linear constraint (\texttt{Equality, Disequation, or Inequality}).
+
+The program also defines a class called \texttt{LinearConstraintSystem} that represents a set of linear constraints. It has a member variable \texttt{\_csts} of type \texttt{std::vector< LinearConstraintT >} that stores the linear constraints. The class provides a method variables that returns a set of variables present in the system.
+
+Overall, this program provides a data structure and functionalities for symbolic manipulation of linear expressions and linear constraints.
+
+The internal expression of \texttt{LinearConstraint} is as follows.
+\begin{lstlisting}
+public:
+  using VariableExpressionT = VariableExpression< Number, VariableRef >;
+  using LinearExpressionT = LinearExpression< Number, VariableRef >;
+
+public:
+  /// \brief Kind of linear constraint
+  enum Kind {
+    Equality,    // ==
+    Disequation, // !=
+    Inequality,  // <=
+  };
+
+private:
+  LinearExpressionT _expr;
+  Kind _kind;
+\end{lstlisting}
+
+\end{document}
