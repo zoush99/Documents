@@ -739,6 +739,26 @@ This file describes the requirements of the type of \texttt{MemoryLocationRef}:
 \end{lstlisting}
 
 \subsubsection{indexable.hpp}
+This file includes generic API for indexing objects.
+\begin{lstlisting}
+/// \brief Traits for indexable objects
+///
+/// IndexableTraits is a structure of traits for indexable objects. These
+/// objects are used e.g. by the patricia tree for organizing the objects in the
+/// tree.
+///
+/// An indexable object must provide:
+///
+/// static Index index(const T&)
+///   Return a unique index
+///
+/// The trait has to be specialized for each specific type.
+///
+/// The traits can be used as:
+/// \code{.cpp}
+///   Index index = IndexableTraits< VariableRef >::index(my_variable_ref);
+/// \endcode
+\end{lstlisting}
 
 \subsubsection{graph.hpp}
 
