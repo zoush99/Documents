@@ -240,4 +240,44 @@ private:
   Kind _kind;
 \end{lstlisting}
 
+
+\subsection{exception.hpp}
+
+This is a basic definition of IKOS abnormal processing. It can print expannatory messages and exit the program. In actual use, this program does not participate in the core function.
+
+\subsection{value}
+\subsubsection{lifetime.hpp}
+This file defines a class \texttt{Lifetime} that represents a lifetime abstract value. The class is a subclass of \texttt{core::AbstractDomain< Lifetime >} and has an enum \texttt{Kind} with values \texttt{BottomKind, AllocatedKind, DeallocatedKind} and \texttt{TopKind}. The class has a private member \texttt{\_kind} of type Kind initialized to \texttt{TopKind}. The class has a private constructor that takes a Kind parameter and sets the \texttt{\_kind} member. The purpose of this class is to represent and manipulate lifetime abstract values in the ikos analysis framework. The class provides methods to check if a lifetime is bottom, allocated, or deallocated, and to join and meet two lifetime values. The class also provides a method to compute the widening of a lifetime value.
+\begin{lstlisting}
+  enum Kind : unsigned {
+    BottomKind = 0,
+    AllocatedKind = 1,
+    DeallocatedKind = 2,
+    TopKind = 3
+  };
+\end{lstlisting}
+
+This program can be used to check the survival cycle of variables, which can analyze the reliability of the program.This program is the definition of the abstraction value of the lifetime of variables.
+
+\subsubsection{nullity.hpp}
+This program describes the abstract value of variables. There are four possible situations: \texttt {bottomKind, nullKind, nonnullkind} and \texttt {Topkind}.This program is used to check the vacancy of the variable and analyze the reliability of the program.It contains various methods of abstract value operation.
+\begin{lstlisting}
+  enum Kind : unsigned {
+    BottomKind = 0,
+    NullKind = 1,
+    NonNullKind = 2,
+    TopKind = 3
+  };
+\end{lstlisting}
+
+\subsubsection{uinitilized.hpp}
+This program describes the abstract value of the initialization of variables. There are four abstract states, it is either top, bottom, initialized or uninitialized. This program is used to check the initialization of the variable and analyze the reliability of the program. There contains various methods of abstract value operation.
+\begin{lstlisting}
+  enum Kind : unsigned {
+    BottomKind = 0,
+    InitializedKind = 1,
+    UninitializedKind = 2,
+    TopKind = 3
+  };
+\end{lstlisting}
 \end{document}
