@@ -54,14 +54,14 @@ citecolor=blue, urlcolor=blue]{hyperref}
     xleftmargin=15pt
 }
 \begin{document}
- 
+
 % EVERYTHING ABOVE THIS LINE IS JUST PREABLE, NO NEED TO MESS WITH IT.__________________________________________________________________________________________
 %
 
 \lhead{Math 108}
 \chead{Your Name}
 \rhead{\today}
- 
+
 % \maketitle
 
 \section{Introduction of IKOS}
@@ -76,7 +76,7 @@ This program is a header file that contains definitions related to numbers in th
     #include <ikos/core/number/machine_int.hpp>
     #include <ikos/core/number/q_number.hpp>
     #include <ikos/core/number/z_number.hpp>
-\end{lstlisting} 
+\end{lstlisting}
 
 \subsubsection{literal.hpp}
 This program introduces  data structures for literals. The class to represent a literal is classfied to these types: \texttt{constant machine integer, constant floating point, constant memory location, null, undefined, machine integer variable, floating point variable, and pointer variable}. Lit is defined as follows,
@@ -221,7 +221,7 @@ The program also defines a class called \texttt{LinearConstraintSystem} that rep
 
 Overall, this program provides a data structure and functionalities for symbolic manipulation of linear expressions and linear constraints.
 
-The internal expression of \texttt{LinearConstraint} is as follows. A \texttt{LinearConstraint} consists of two components, \texttt{LinearExpression} and \texttt{Operator}, the \texttt{Operator} express the relations of \texttt{LinearExpression} and \texttt{zero}. 
+The internal expression of \texttt{LinearConstraint} is as follows. A \texttt{LinearConstraint} consists of two components, \texttt{LinearExpression} and \texttt{Operator}, the \texttt{Operator} express the relations of \texttt{LinearExpression} and \texttt{zero}.
 \begin{lstlisting}
 public:
   using VariableExpressionT = VariableExpression< Number, VariableRef >;
@@ -240,7 +240,6 @@ private:
   Kind _kind;
 \end{lstlisting}
 
-<<<<<<< HEAD
 There are some functions to construct simple constraints, such as \texttt{tautology} and \texttt{contradiction}.
 \begin{lstlisting}
   /// \brief Create the tautology 0 == 0
@@ -254,7 +253,7 @@ There are some functions to construct simple constraints, such as \texttt{tautol
   }
 \end{lstlisting}
 
-In addition, there are many auxiliary functions that can help \texttt {linearexpression} convert to \texttt {linearConstraint}.Such as \texttt {\leq, <, =,>, \geq}. Besides \texttt{LinearExpression}, we can use \texttt{VariableExpression}. Let's take an example below.
+In addition, there are many auxiliary functions that can help \texttt {linearexpression} convert to \texttt {linearConstraint}.Such as $\leq, <, =,>, \geq$. Besides \texttt{LinearExpression}, we can use \texttt{VariableExpression}. Let's take an example below.
 
 \begin{lstlisting}
 template < typename Number, typename VariableRef >
@@ -304,15 +303,13 @@ private:
   Constraints _csts;
 \end{lstlisting}
 
-=======
-
 \subsection{exception.hpp}
 
 This is a basic definition of IKOS abnormal processing. It can print expannatory messages and exit the program. In actual use, this program does not participate in the core function.
 
 \subsection{value}
 \subsubsection{lifetime.hpp}
-This file defines a class \texttt{Lifetime} that represents a lifetime abstract value. The class is a subclass of \texttt{core::AbstractDomain< Lifetime >} and has an enum \texttt{Kind} with values \texttt{BottomKind, AllocatedKind, DeallocatedKind} and \texttt{TopKind}. The class has a private member \texttt{\_kind} of type Kind initialized to \texttt{TopKind}. The class has a private constructor that takes a Kind parameter and sets the \texttt{\_kind} member. The purpose of this class is to represent and manipulate lifetime abstract values in the ikos analysis framework. The class provides methods to check if a lifetime is bottom, allocated, or deallocated, and to join and meet two lifetime values. The class also provides a method to compute the widening of a lifetime value.
+This file defines a class \texttt{Lifetime} that represents a lifetime abstract value. The class is a subclass of \texttt{core::AbstractDomain< Lifetime >} and has an enum \texttt{Kind} with values \texttt{BottomKind, AllocatedKind, DeallocatedKind} and \texttt{TopKind}. The class has a private member \texttt{\_kind} of type Kind initialized to \texttt{TopKind}. The class has a private constructor that takes a Kind parameter and sets the \texttt{\_kind} member. The purpose of this class is to represent and manipulate lifetime abstract values in the IKOSanalysis framework. The class provides methods to check if a lifetime is bottom, allocated, or deallocated, and to join and meet two lifetime values. The class also provides a method to compute the widening of a lifetime value.
 \begin{lstlisting}
   enum Kind : unsigned {
     BottomKind = 0,
@@ -347,7 +344,7 @@ This program describes the abstract value of the initialization of variables. Th
 \end{lstlisting}
 
 \subsubsection{machine\_int/interval.hpp}
-This file is a definition of Machine Integer Interval. Its Member Variables Include \ TextTt {\ _LB} and \ texttt {\ _ ub}. Bounds of Machine Integer Interval. 
+This file is a definition of Machine Integer Interval. Its Member Variables include \texttt{\_LB} and \texttt{\_ub}. Bounds of Machine Integer Interval.
 
 The representation of \texttt{Topkind} and \texttt{BottomKind} in this program is different from expressed in the numerical abstract domain.
 
@@ -464,11 +461,11 @@ There are also methods for converting Machine Integer Interval to Zinterval, suc
   }
 \end{lstlisting}
 
-\subsubsection{machine\_int/interval\_congruence.hpp}
-This file design the intervalcongRuense class of the Machine Integer. This is Implement as a Pair of interval and connected value. This abstract value type combines the \texttt{Interval} and \texttt{Congruence} abstraction value can represent the interval information of the variable, and it can represent TongyuRelationship.
-
 \subsubsection{machine\_int/congruence.hpp}
 This file describes the operation of the abstract value of the Congruence abstract domain. There are simple operations and \texttt{join, meet, widening} and \texttt{narrowing}.
+
+\subsubsection{machine\_int/interval\_congruence.hpp}
+This file design the intervalcongruence class of the Machine Integer. This is Implement as a Pair of interval and connected value. This abstract value type combines the \texttt{Interval} and \texttt{Congruence} abstraction value can represent the interval information of the variable, and it can represent TongyuRelationship.
 
 \subsubsection{machine\_int/constant.hpp}
 This program describes the abstract value of the constant. This program is used to check the constant value and analyze the reliability of the program. There contains various methods of abstract value operation.
@@ -486,7 +483,7 @@ private:
 \end{lstlisting}
 This represents the type of the constant abstraction of the machine integer. There are three cases: \ texttt {bottomkind}, \ texttt {Topkind} and \ texttt {integerKind}, respectively, respectively, respectively \texttt {bottomKind}, \texttt {Topkind } And \texttt {IntegerKind} type of abstract value.
 
-We can construct top constant, bottom constant and machine integer constant for the given bit-width and signedness. 
+We can construct top constant, bottom constant and machine integer constant for the given bit-width and signedness.
 \begin{lstlisting}
   /// \brief Create the top constant for the given bit-width and signedness
   static Constant top(uint64_t bit_width, Signedness sign) {
@@ -556,19 +553,196 @@ public:
   }
 \end{lstlisting}
 
-It is worth noting that here only support the original machine integer type and the converted \texttt{GMP} integer. \textcolor{green}{If you need to support the analysis of floating-point types, you need to modify the part of this file.} As follows.
+It is worth noting that here only support the original machine integer type and the converted \texttt{ZNumber} integer. \textcolor{green}{If you need to support the analysis of floating-point types, you need to modify the part of this file.} As follows.
 \begin{lstlisting}
   inline Interval< FNumber > operator/(const Interval< FNumber >& lhs,
-                                     const Interval< FNumber >& rhs) {
+                                     const Interval< FNumber >& rhs)
 \end{lstlisting}
 
 \subsubsection{numeric/congruence.hpp}
+This file represents the abstract value operation of the \texttt{Congruence} abstract domain in the numerical abstract domain. This function mainly processs the analysis of the program in the program of \texttt{FNumber} type. Its definition is as follows:
+\begin{lstlisting}
+class Congruence< ZNumber > final
+    : public core::AbstractDomain< Congruence< ZNumber > > {
+public:
+  using NumberT = ZNumber;
+
+private:
+  bool _is_bottom;
+  ZNumber _a;
+  ZNumber _b;
+
+  // Invariant: !_is_bottom => _a >= 0
+  // Invariant: !_is_bottom && _a != 0 => 0 <= _b < _a
+  // Invariant: _is_bottom => _a == _b == 0
+
+private:
+  struct TopTag {};
+  struct BottomTag {};
+  };
+\end{lstlisting}
 
 \subsubsection{numeric/interval\_congruence.hpp}
+This file is the \texttt{intervalcongruence} abstract domain, which is similar to the intervalcongruence in the machine integer introduced earlier.
 
 \subsubsection{numeric/constant.hpp}
+This file is similar to the \texttt{constant} in the previously introduced machine integer type, but the difference is that the definition of generic \texttt{Number} is used here.This allows it to support qualified data types, such as \texttt{ZNumber, QNumber} and \texttt{FNumber}.
+\begin{lstlisting}
+template < typename Number >
+class Constant final : public core::AbstractDomain< Constant< Number > > {
+public:
+  using NumberT = Number;
+
+private:
+  enum Kind { BottomKind, TopKind, NumberKind };
+
+private:
+  Kind _kind;
+  Number _n;
+
+private:
+  struct TopTag {};
+  struct BottomTag {};
+
+  /// \brief Create the top constant
+  explicit Constant(TopTag) : _kind(TopKind) {}
+
+  /// \brief Create the bottom constant
+  explicit Constant(BottomTag) : _kind(BottomKind) {}
+
+public:
+  /// \brief Create the top constant
+  static Constant top() { return Constant(TopTag{}); }
+
+  /// \brief Create the bottom constant
+  static Constant bottom() { return Constant(BottomTag{}); }
+
+  /// \brief Create the constant n
+  template <
+      typename T,
+      class = std::enable_if_t< IsSupportedIntegralOrFloat< T >::value > >
+  explicit Constant(T n) : _kind(NumberKind), _n(n) {}
+
+  /// \brief Create the constant n
+  explicit Constant(Number n) : _kind(NumberKind), _n(std::move(n)) {}
+};
+\end{lstlisting}
+
+\textcolor{red}{What confuse me is that unary minus is operator -. But in machine int type, the unary operator is "trunc, ext, ...".What is going on, how should I modify the \texttt{unary operations} I have ignored before?}
+\begin{lstlisting}
+/// \brief Unary minus
+Constant operator-() const {
+    if (this->is_number()) {
+        return Constant(-this->_n);
+      } else {
+        return *this;
+      }
+  }
+\end{lstlisting}
+
+In addition, you should also pay attention to the processing of divisions-by-zero errors, as shown below, if the divisor is zero, the abstract value of analysis results are set to \texttt{bottomKind}.
+\begin{lstlisting}
+/// \brief Divide constants
+template < typename Number >
+inline Constant< Number > operator/(const Constant< Number >& lhs,
+                                    const Constant< Number >& rhs) {
+  using ConstantT = Constant< Number >;
+
+  if (lhs.is_bottom() || rhs.is_bottom()) {
+    return ConstantT::bottom();
+  } else if (rhs.is_zero()) {
+    return ConstantT::bottom();
+  } else if (lhs.is_zero()) {
+    return ConstantT(0);
+  } else if (lhs.is_top() || rhs.is_top()) {
+    return ConstantT::top();
+  } else {
+    return ConstantT(lhs._n / rhs._n);
+  }
+}
+\end{lstlisting}
 
 \subsubsection{numeric/gauge.hpp}
+This abstract domain is designed by IKOS itself and analyzes the nested loop of the integer type in programs. If you want to know more, you can study their paper: \textbf{The Gauge Domain: Scalable Analysis of Linear Inequality Invariants}.
+
+\subsubsection{pointer/pointer.hpp}
+The \texttt{PointerAbsValue} class contains the following members:
+
+\begin{itemize}
+  \item \texttt{\_uninitialized}: An instance of the Uninitialized class representing the uninitialized state of the pointer.
+  \item \texttt{\_nullity}: An instance of the Nullity class representing the nullity of the pointer.
+  \item \texttt{\_points\_to}: An instance of the PointsToSetT class representing the set of memory locations that the pointer points to.
+  \item \texttt{\_offset}: An instance of the MachineIntInterval class representing the offset of the pointer.
+\end{itemize}
+The class provides various constructors to create instances of PointerAbsValue with different initial values. It also provides copy and move constructors and assignment operators.
+
+The class overrides several virtual functions from the AbstractValue base class, such as \texttt{name(), is\_bottom(), is\_top(), equals(), leq()}, and others. These functions are used for comparison and manipulation of the pointer abstract values.
+
+The class also provides member functions for reducing the abstract value, such as \texttt{reduce(), set\_to\_bottom(), set\_to\_null(), set\_to\_uninitialized()}, and others. These functions are used to simplify the abstract value based on certain conditions.
+
+Overall, this program represents a part of the implementation of the abstract interpretation of pointers.
+
+\subsubsection{pointer/pointer\_set.hpp}
+\textcolor{red}{You need to take a closer look at these two programs. They are files for the abstract value operation.}
+\subsubsection{pointer/pointer\_to\_set.hpp}
+
+\subsection{semantic}
+\subsubsection{variable.hpp}
+This file describes the requirements of the type of \texttt{VariableRef}:
+\begin{lstlisting}
+/// \brief Check if the given type meets the requirements for Variable types
+///
+/// Requirements:
+///
+/// VariableRef has a noexcept copy constructor
+/// VariableRef has a noexcept move constructor
+/// VariableRef has a noexcept copy assignment operator
+/// VariableRef has a noexcept move assignment operator
+///
+/// bool operator==(VariableRef x, VariableRef y)
+///   Return true if x and y refers to the same variable
+///
+/// bool operator<(VariableRef x, VariableRef y)
+///   Return true if index(x) < index(y)
+///
+/// VariableRef implements DumpableTraits
+///
+/// VariableRef implements IndexableTraits
+///
+/// The VariableRef type should be cheap to copy.
+\end{lstlisting}
+
+\subsubsection{memory\_location.hpp}
+This file describes the requirements of the type of \texttt{MemoryLocationRef}:
+\begin{lstlisting}
+  /// \brief Check if the given type meets the requirements for memory location
+  /// types
+  ///
+  /// Requirements:
+  ///
+  /// MemoryLocationRef has a noexcept copy constructor
+  /// MemoryLocationRef has a noexcept move constructor
+  /// MemoryLocationRef has a noexcept copy assignment operator
+  /// MemoryLocationRef has a noexcept move assignment operator
+  ///
+  /// bool operator==(MemoryLocationRef x, MemoryLocationRef y)
+  ///   Return true if x and y refers to the same memory location
+  ///
+  /// bool operator<(MemoryLocationref x, MemoryLocationref y)
+  ///   Return true if index(x) < index(y)
+  ///
+  /// MemoryLocationRef implements DumpableTraits
+  ///
+  /// MemoryLocationRef implements IndexableTraits
+  ///
+  /// The MemoryLocationRef type should be cheap to copy.
+\end{lstlisting}
+
+\subsubsection{indexable.hpp}
+
+\subsubsection{graph.hpp}
+
+\subsubsection{dumpable.hpp}
 
 
 
@@ -587,9 +761,5 @@ It is worth noting that here only support the original machine integer type and 
 
 
 
-
-
-
->>>>>>> 6da07aae6b32b6627fa4f9ecf459f395d0c392c4
 
 \end{document}
