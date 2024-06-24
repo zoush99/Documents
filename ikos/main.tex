@@ -221,7 +221,7 @@ The program also defines a class called \texttt{LinearConstraintSystem} that rep
 
 Overall, this program provides a data structure and functionalities for symbolic manipulation of linear expressions and linear constraints.
 
-The internal expression of \texttt{LinearConstraint} is as follows.
+The internal expression of \texttt{LinearConstraint} is as follows. A \texttt{LinearConstraint} consists of two components, \texttt{LinearExpression} and \texttt{Operator}, the \texttt{Operator} express the relations of \texttt{LinearExpression} and \texttt{zero}. 
 \begin{lstlisting}
 public:
   using VariableExpressionT = VariableExpression< Number, VariableRef >;
@@ -239,5 +239,69 @@ private:
   LinearExpressionT _expr;
   Kind _kind;
 \end{lstlisting}
+
+There are some functions to construct simple constraints, such as \texttt{tautology} and \texttt{contradiction}.
+\begin{lstlisting}
+  /// \brief Create the tautology 0 == 0
+  static LinearConstraint tautology() {
+    return LinearConstraint(LinearExpressionT(), Equality);
+  }
+
+  /// \brief Create the contradiction 0 != 0
+  static LinearConstraint contradiction() {
+    return LinearConstraint(LinearExpressionT(), Disequation);
+  }
+\end{lstlisting}
+
+In addition, there are many auxiliary functions that can help \texttt {linearexpression} convert to \texttt {linearConstraint}.Such as \texttt {\leq, <, =,>, \geq}. Besides \texttt{LinearExpression}, we can use \texttt{VariableExpression}. Let's take an example below.
+
+\begin{lstlisting}
+template < typename Number, typename VariableRef >
+inline LinearConstraint< Number, VariableRef > operator<=(
+    LinearExpression< Number, VariableRef > e, const Number& n) {
+  return LinearConstraint<
+      Number,
+      VariableRef >(std::move(e) - n,
+                    LinearConstraint< Number, VariableRef >::Inequality);
+}
+
+template < typename Number, typename VariableRef >
+inline LinearConstraint< Number, VariableRef > operator<=(
+    VariableExpression< Number, VariableRef > x,
+    VariableExpression< Number, VariableRef > y) {
+  return LinearConstraint<
+      Number,
+      VariableRef >(std::move(x) - std::move(y),
+                    LinearConstraint< Number, VariableRef >::Inequality);
+}
+
+template < typename Number, typename VariableRef >
+inline LinearConstraint< Number, VariableRef > operator<=(
+    LinearExpression< Number, VariableRef > x,
+    const LinearExpression< Number, VariableRef >& y) {
+  return LinearConstraint<
+      Number,
+      VariableRef >(std::move(x) - y,
+                    LinearConstraint< Number, VariableRef >::Inequality);
+}
+\end{lstlisting}
+
+In order to better process the restrictions in the future, in this file, the \texttt {linearconstraintsystem} class can be constructed, which can be uniformly collected to be collected for efficiency.The constructor process is more delicate. Use \texttt {vector} to store constraints, and use \texttt {iterator} to traverse the constraints. Programs can use function \texttt{add} to add constraints or constraint system.
+
+\begin{lstlisting}
+  public:
+  using LinearConstraintT = LinearConstraint< Number, VariableRef >;
+
+private:
+  using Constraints = std::vector< LinearConstraintT >;
+
+public:
+  using Iterator = typename Constraints::iterator;
+  using ConstIterator = typename Constraints::const_iterator;
+
+private:
+  Constraints _csts;
+\end{lstlisting}
+
 
 \end{document}
